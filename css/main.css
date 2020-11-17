@@ -9,6 +9,7 @@
     min-height: 500px;
     background-color: #ffffff00;
     transition: visibility 0s, background-color 0.5s linear;
+    padding-bottom: 30px;
 }
 
 #close {
