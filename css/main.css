@@ -30,12 +30,13 @@
     background-color: rgb(255, 255, 255);
     position: fixed; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
-    left:0;
+    left:20px;
     width: 100%; /* Full width */
 }
 
 .navbar p{
-    font-size: larger;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
     float: left;
     display: block;
     color: #111;
