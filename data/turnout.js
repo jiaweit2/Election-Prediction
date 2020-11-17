@@ -1,3 +1,8 @@
+function createTurnout(state) {
+  document.getElementById("state").innerHTML = stateHash[state];
+  document.getElementById("turnout").innerHTML = "Voter Turnout Rate: " + turnoutActData[state]["__4"];
+}
+
 var turnoutActData = {
   "": {
     "": "Source",
@@ -795,9 +800,4 @@ var turnoutActData = {
     "__9": "6,759",
     "__10": "",
   }
-}
-
-function createTurnout(state) {
-  document.getElementById("state").innerHTML = stateHash[state];
-  document.getElementById("turnout").innerHTML = "Turnout Rate: " + turnoutActData[state]["__4"];
 }
