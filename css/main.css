@@ -16,6 +16,7 @@
     right: 15px;
     font-size: 40px;
     cursor: pointer;
+    user-select: none;
 }
 
 #container {
