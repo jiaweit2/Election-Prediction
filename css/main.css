@@ -1,5 +1,5 @@
 #popup {
-    overflow: auto;
+    overflow-x: hidden;
     visibility: hidden;
     position: absolute;
     left: 50%;
