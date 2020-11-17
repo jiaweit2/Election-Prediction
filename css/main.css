@@ -1,0 +1,56 @@
+#popup {
+    visibility: hidden;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 100px;
+    width: 800px;
+    min-height: 500px;
+    background-color: #ffffff00;
+    transition: visibility 0s, background-color 0.5s linear;
+}
+
+#close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+#container {
+    width: 950px;
+    margin: 0 auto;
+    margin-top: 90px;
+}
+
+/* The navigation bar */
+.navbar {
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    left:0;
+    width: 100%; /* Full width */
+}
+
+.navbar p{
+    font-size: larger;
+    float: left;
+    display: block;
+    color: #111;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+body {
+    margin:0;
+}
+  

@@ -1,157 +1,139 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-	<title>Election Prediction 2020 | Seattle Needles</title>
-	<script src="js/chart.min.js"></script>
-	<script src="js/utils.js"></script>
-	<style>
-	canvas {
-		-moz-user-select: none;
-		-webkit-user-select: none;
-		-ms-user-select: none;
-	}
-	</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Election Prediction 2020 | Seattle Needles</title>
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-	<div id="canvas-holder" style="width:40%">
-		<canvas id="chart-area"></canvas>
-	</div>
-	<button id="randomizeData">Randomize Data</button>
-	<button id="addDataset">Add Dataset</button>
-	<button id="removeDataset">Remove Dataset</button>
-	<button id="addData">Add Data</button>
-	<button id="removeData">Remove Data</button>
-	<button id="changeCircleSize">Semi/Full Circle</button>
-	<script>
-		var randomScalingFactor = function() {
-			return Math.round(Math.random() * 100);
-		};
+  <div class="navbar">
+    <p>Election Prediction 2020</p>
+  </div>
+  <div id="container"></div>
+  <div id="popup">
+    <div id="canvas-holder" style="width:60%">
+      <span id='close' onclick="closePopup()">&#10006;</span>
+      <canvas id="chart-area"></canvas>
+    </div>
+  </div>
+  <!-- /container -->
 
-		var config = {
-			type: 'doughnut',
-			data: {
-				datasets: [{
-					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-					],
-					backgroundColor: [
-						window.chartColors.red,
-						window.chartColors.orange,
-						window.chartColors.yellow,
-						window.chartColors.green,
-						window.chartColors.blue,
-					],
-					label: 'Dataset 1'
-				}],
-				labels: [
-					'Red',
-					'Orange',
-					'Yellow',
-					'Green',
-					'Blue'
-				]
-			},
-			options: {
-				responsive: true,
-				legend: {
-					position: 'top',
-				},
-				title: {
-					display: true,
-					text: 'Chart.js Doughnut Chart'
-				},
-				animation: {
-					animateScale: true,
-					animateRotate: true
-				}
-			}
-		};
+  <script src="js/raphael-min.js"></script>
+  <script src="js/us-map-svg.js"></script>
+  <script src="js/chart.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function labelPath(pathObj, text) {
+      fontSize = 15;
+      smallStates = ["VT", "NH", "MA", "RI", "CT", "NJ", "DE", "MD", "DC"]
+      if (smallStates.includes(text)) {
+        fontSize = 10
+      }
+      var bbox = pathObj.getBBox();
+      x = bbox.x + bbox.width / 2;
+      y = bbox.y + bbox.height / 2;
+      switch (text) {
+        case "CA":
+          x -= 18;
+          break;
+        case "ID":
+          y += 20;
+          break;
+        case "LA":
+          x -= 20
+          y += 5
+          break;
+        case "MN":
+          x -= 10;
+          break;
+        case "FL":
+          x += 50;
+          break;
+        case "MI":
+          x += 25;
+          y += 20;
+          break;
+        case "KY":
+          x += 10;
+          break;
+        case "VA":
+          x += 10;
+          break;
+        case "NH":
+          y += 10;
+          break;
+        case "MD":
+          x += 10;
+          break;
+        case "DC":
+          fontSize = 0;
+          break;
+      }
 
-		window.onload = function() {
-			var ctx = document.getElementById('chart-area').getContext('2d');
-			window.myDoughnut = new Chart(ctx, config);
-		};
+      textattr = { 'font-size': fontSize, fill: '#000', stroke: 'none', 'font-family': 'Arial,Helvetica,sans-serif', 'font-weight': 400 };
+      var textObj = pathObj.paper.text(x, y, text).attr(textattr);
+      return textObj;
+    }
+    window.onload = function () {
+      var R = Raphael("container", 950, 600),
+        attr = {
+          "fill": "#d3d3d3",
+          "stroke": "#fff",
+          "stroke-opacity": "1",
+          "stroke-linejoin": "round",
+          "stroke-miterlimit": "4",
+          "stroke-width": "0.75",
+          "stroke-dasharray": "none"
+        },
+        usRaphael = {};
 
-		document.getElementById('randomizeData').addEventListener('click', function() {
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data = dataset.data.map(function() {
-					return randomScalingFactor();
-				});
-			});
+      //Draw Map and store Raphael paths
+      for (var state in usMap) {
+        usRaphael[state] = R.path(usMap[state]).attr(attr);
+      }
 
-			window.myDoughnut.update();
-		});
+      //Initialization
+      redStates = ["ak", "mt", "id", "wy", "ut", "nd", "sd", "ne", "ks", "ok", "tx", "la", "ar", "mo", "ia", "ms", "al", "tn", "in", "ky", "oh", "wy", "sc", "nc", "fl"]
 
-		var colorNames = Object.keys(window.chartColors);
-		document.getElementById('addDataset').addEventListener('click', function() {
-			var newDataset = {
-				backgroundColor: [],
-				data: [],
-				label: 'New dataset ' + config.data.datasets.length,
-			};
+      //Do Work on Map
+      for (var state in usRaphael) {
+        var col = "#4DBBF5";
+        if (redStates.includes(state)) {
+          col = "#EB6466"
+        }
+        usRaphael[state].attr("fill", col);
+        textObj = labelPath(usRaphael[state], state.toUpperCase());
+        (function (st, state, textObj) {
 
-			for (var index = 0; index < config.data.labels.length; ++index) {
-				newDataset.data.push(randomScalingFactor());
+          st[0].style.cursor = "pointer";
 
-				var colorName = colorNames[index % colorNames.length];
-				var newColor = window.chartColors[colorName];
-				newDataset.backgroundColor.push(newColor);
-			}
+          st[0].onmouseover = function () {
+            st.animate({ stroke: "#000" }, 500);
+            st.toFront();
+            textObj.toFront();
+            R.safari();
+          };
 
-			config.data.datasets.push(newDataset);
-			window.myDoughnut.update();
-		});
+          st[0].onclick = function () {
+            showResults(state, usRaphael[state].attrs.fill);
+          };
 
-		document.getElementById('addData').addEventListener('click', function() {
-			if (config.data.datasets.length > 0) {
-				config.data.labels.push('data #' + config.data.labels.length);
+          st[0].onmouseout = function () {
+            st.animate({ stroke: "#fff" }, 500);
+            st.toFront();
+            textObj.toFront();
+            R.safari();
+          };
 
-				var colorName = colorNames[config.data.datasets[0].data.length % colorNames.length];
-				var newColor = window.chartColors[colorName];
+        })(usRaphael[state], state, textObj);
+      }
 
-				config.data.datasets.forEach(function(dataset) {
-					dataset.data.push(randomScalingFactor());
-					dataset.backgroundColor.push(newColor);
-				});
-
-				window.myDoughnut.update();
-			}
-		});
-
-		document.getElementById('removeDataset').addEventListener('click', function() {
-			config.data.datasets.splice(0, 1);
-			window.myDoughnut.update();
-		});
-
-		document.getElementById('removeData').addEventListener('click', function() {
-			config.data.labels.splice(-1, 1); // remove the label first
-
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data.pop();
-				dataset.backgroundColor.pop();
-			});
-
-			window.myDoughnut.update();
-		});
-
-		document.getElementById('changeCircleSize').addEventListener('click', function() {
-			if (window.myDoughnut.options.circumference === Math.PI) {
-				window.myDoughnut.options.circumference = 2 * Math.PI;
-				window.myDoughnut.options.rotation = -Math.PI / 2;
-			} else {
-				window.myDoughnut.options.circumference = Math.PI;
-				window.myDoughnut.options.rotation = -Math.PI;
-			}
-
-			window.myDoughnut.update();
-		});
-	</script>
+    };
+  </script>
 </body>
 
 </html>
