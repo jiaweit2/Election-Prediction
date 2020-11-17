@@ -14,9 +14,13 @@
   </div>
   <div id="container"></div>
   <div id="popup">
-    <div id="canvas-holder" style="width:60%">
-      <span id='close' onclick="closePopup()">&#10006;</span>
-      <canvas id="chart-area"></canvas>
+    <span id='close' onclick="closePopup()">&#10006;</span>
+    <div class="contents">
+      <p id="state"></p>
+      <p id="turnout"></p>
+      <div id="content-child" style="margin: 5px 20%;">
+        <canvas id="chart-demo"></canvas>
+      </div>
     </div>
   </div>
   <!-- /container -->
@@ -26,6 +30,9 @@
   <script src="js/chart.min.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/main.js"></script>
+  <script type="text/javascript" src="data/demo.js"></script>
+  <script type="text/javascript" src="data/turnout.js"></script>
+
   <script>
     function labelPath(pathObj, text) {
       fontSize = 15;
@@ -119,7 +126,7 @@
           };
 
           st[0].onclick = function () {
-            showResults(state, usRaphael[state].attrs.fill);
+            showResults(state.toUpperCase(), usRaphael[state].attrs.fill);
           };
 
           st[0].onmouseout = function () {

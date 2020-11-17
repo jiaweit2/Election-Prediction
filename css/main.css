@@ -1,6 +1,7 @@
 #popup {
+    overflow: auto;
     visibility: hidden;
-    position: fixed;
+    position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
     top: 100px;
@@ -23,6 +24,20 @@
     width: 950px;
     margin: 0 auto;
     margin-top: 90px;
+}
+
+#state {
+    font-size: 30px;
+}
+
+.contents {
+    width: 100%;
+    text-align: center;
+    margin: 5px;
+}
+
+.content-child {
+    display: inline-block;
 }
 
 /* The navigation bar */
