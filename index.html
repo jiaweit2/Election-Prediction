@@ -15,12 +15,28 @@
   <div id="container"></div>
   <div id="popup">
     <span id='close' onclick="closePopup()">&#10006;</span>
+    <p id="state"></p>
     <div class="contents">
-      <p id="state"></p>
-      <p id="turnout"></p>
-      <div id="content-child" style="margin: 5px 20%;">
-        <canvas id="chart-demo"></canvas>
-      </div>
+      <ul>
+        <li id="turnout"></li>
+        <li>
+          <b>Predicted Demographics by race:</b> (Inner: voters for Republican, Outer: voters for Democratic)
+          <div class="content-child" style="margin: 5px 20%;">
+            <canvas id="demo-pie"></canvas>
+          </div>
+        </li>
+        <li>
+          <b>Predicted Demographics by race for each gender:</b>
+          <div class="content-child" style="margin: 5px 20%;">
+            <canvas id="demo-White"></canvas>
+            <canvas id="demo-Hispanic"></canvas>
+            <canvas id="demo-Black"></canvas>
+            <canvas id="demo-API"></canvas>
+            <canvas id="demo-AIAN"></canvas>
+            <canvas id="demo-Unknown"></canvas>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
   <!-- /container -->
@@ -30,6 +46,7 @@
   <script src="js/chart.min.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/main.js"></script>
+  <script type="text/javascript" src="data/predicted.js"></script>
   <script type="text/javascript" src="data/demo.js"></script>
   <script type="text/javascript" src="data/turnout.js"></script>
 
@@ -86,6 +103,10 @@
       return textObj;
     }
     window.onload = function () {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
       var R = Raphael("container", 950, 600),
         attr = {
           "fill": "#d3d3d3",
@@ -110,7 +131,7 @@
       for (var state in usRaphael) {
         var col = "#4DBBF5";
         if (redStates.includes(state)) {
-          col = "#EB6466"
+          col = "#EB4444";
         }
         usRaphael[state].attr("fill", col);
         textObj = labelPath(usRaphael[state], state.toUpperCase());

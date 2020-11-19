@@ -1,15 +1,18 @@
 #popup {
     overflow-x: hidden;
-    visibility: hidden;
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
     top: 100px;
     width: 800px;
-    min-height: 500px;
-    background-color: #ffffff00;
-    transition: visibility 0s, background-color 0.5s linear;
+    height: auto;
+    background-color: #ffffff;
+    opacity: 0;
+    transition: opacity 0.8s;
     padding-bottom: 30px;
+    text-align: center;
+    z-index: 20;
+    pointer-events: none;
 }
 
 #close {
@@ -22,8 +25,10 @@
 }
 
 #container {
+    position: inherit;
     width: 950px;
-    margin: 0 auto;
+    margin: auto 50vw 0;
+    transform: translate(-50%, 0);
     margin-top: 90px;
 }
 
@@ -33,13 +38,15 @@
 
 .contents {
     width: 95%;
-    text-align: center;
     margin: 5px;
+    text-align: left;
 }
 
-.content-child {
-    display: inline-block;
+.contents li {
+    font-size: 15px;
+    margin-bottom: 10px;
 }
+
 
 /* The navigation bar */
 .navbar {
@@ -47,8 +54,10 @@
     background-color: rgb(255, 255, 255);
     position: fixed; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
-    left:20px;
+    left: 0;
+    padding-left: 20px;
     width: 100%; /* Full width */
+    z-index: 999;
 }
 
 .navbar p{
@@ -66,9 +75,9 @@ canvas {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    height: 0;
 }
 
 body {
     margin:0;
 }
-  

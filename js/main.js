@@ -4,22 +4,32 @@ const randomScalingFactor = function () {
 window.charts = []
 
 function showResults(state, bg) {
-    document.getElementById("popup").style.visibility = "visible";
+    document.getElementById("popup").style.pointerEvents = "initial";
+    document.getElementById("popup").style.opacity = "1";
     if (bg == "#4DBBF5") {
-        bg = "#96D5F7E0";
+        bg = "#ADE1FA";
     } else {
-        bg = "#EEAEAFE0";
+        bg = "#EEB3BE";
     }
     document.getElementById("popup").style.backgroundColor = bg;
+
+    // Show data
     createTurnout(state);
     createDemoGraph(state);
 }
 
 function closePopup() {
-    document.getElementById("popup").style.visibility = "hidden";
+    document.getElementById("popup").style.opacity = "0";
     document.getElementById("popup").style.backgroundColor = "#ffffff00";
+    document.getElementById("popup").style.pointerEvents = "none";
     window.charts.forEach(chart => {
         chart.destroy();
     });
     window.charts = []
+    setTimeout(() => {
+        let arr = ["AIAN", "API", "Black", "White", "Hispanic", "Unknown"];
+        arr.forEach(race => {
+            document.getElementById('demo-' + race).style.height = "0";
+        });
+    }, 800);
 }

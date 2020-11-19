@@ -1,47 +1,61 @@
+var races = ["AIAN", "API", "Black", "White", "Hispanic", "Unknown"];
+
 function createDemoGraph(state) {
-    var ctx = document.getElementById('chart-demo').getContext('2d');
+    Chart.defaults.font.color = "#000";
+    races.forEach(race => {
+        createRaceGraph(state, race);
+    });
+    createRacePie(state);
+}
+
+function createRacePie(state) {
     var config = {
         type: 'pie',
         data: {
             datasets: [{
                 data: [
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
+                    predictedData[state]["aianDemocratCounter"],
+                    predictedData[state]["apiDemocratCounter"],
+                    predictedData[state]["whiteDemocratCounter"],
+                    predictedData[state]["blackDemocratCounter"],
+                    predictedData[state]["hispanicDemocratCounter"],
+                    predictedData[state]["unknownDemocratCounter"],
                 ],
                 backgroundColor: [
-                    window.chartColors.red,
-                    window.chartColors.orange,
-                    window.chartColors.yellow,
-                    window.chartColors.green,
-                    window.chartColors.blue,
+                    "#FFBA5C",
+                    "#FFEA77",
+                    "#eee",
+                    "#111",
+                    "#E8A47D",
+                    "#627832"
                 ],
-                label: 'Actual'
+                label: 'Dataset 1'
             }, {
                 data: [
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
+                    predictedData[state]["aianRepublicanCounter"],
+                    predictedData[state]["apiRepublicanCounter"],
+                    predictedData[state]["whiteRepublicanCounter"],
+                    predictedData[state]["blackRepublicanCounter"],
+                    predictedData[state]["hispanicRepublicanCounter"],
+                    predictedData[state]["unknownRepublicanCounter"],
                 ],
                 backgroundColor: [
-                    window.chartColors.red,
-                    window.chartColors.orange,
-                    window.chartColors.yellow,
-                    window.chartColors.green,
-                    window.chartColors.blue,
+                    "#FFBA5C",
+                    "#FFEA77",
+                    "#eee",
+                    "#111",
+                    "#E8A47D",
+                    "#627832"
                 ],
-                label: 'Predicted'
+                label: 'Dataset 2'
             }],
             labels: [
-                'Red',
-                'Orange',
-                'Yellow',
-                'Green',
-                'Blue'
+                'AIAN',
+                'API',
+                'White',
+                'Black',
+                'Hispanic',
+                "Unknown"
             ]
         },
         options: {
@@ -49,16 +63,90 @@ function createDemoGraph(state) {
             legend: {
                 position: 'top',
             },
-            title: {
-                display: true,
-                text: 'Voter Demographics'
-            },
             animation: {
                 animateScale: true,
                 animateRotate: true
             }
         }
     };
-    Chart.defaults.font.color = "#000";
+    document.getElementById('demo-pie').style.height = "auto";
+    var ctx = document.getElementById('demo-pie').getContext('2d');
     window.charts.push(new Chart(ctx, config));
+}
+
+function createRaceGraph(state, race) {
+    var title = race;
+    switch (race) {
+        case "AIAN":
+            title = "American Indian & Alaska Native (AIAN)"
+            break;
+        case "API":
+            title = "Asian/Pacific Islander (API)"
+            break;
+        case "Unknown":
+            title = "Unknown Race"
+            break;
+    }
+    var barChartData = {
+        labels: ['Democratic', 'Republican', 'Neutral', 'Unknown'],
+        datasets: [{
+            label: 'Male',
+            backgroundColor: window.chartColors.blue,
+            data: [
+                predictedData[state][race.toLowerCase() + "ManDemocratCounter"],
+                predictedData[state][race.toLowerCase() + "ManRepublicanCounter"],
+                predictedData[state][race.toLowerCase() + "ManNeutralCounter"],
+                predictedData[state][race.toLowerCase() + "ManUnknownPoliticsCounter"],
+            ]
+        },
+        {
+            label: 'Female',
+            backgroundColor: window.chartColors.red,
+            data: [
+                predictedData[state][race.toLowerCase() + "WomanDemocratCounter"],
+                predictedData[state][race.toLowerCase() + "WomanRepublicanCounter"],
+                predictedData[state][race.toLowerCase() + "WomanNeutralCounter"],
+                predictedData[state][race.toLowerCase() + "WomanUnknownPoliticsCounter"],
+            ]
+        },
+        {
+            label: 'Unknown',
+            backgroundColor: window.chartColors.yellow,
+            data: [
+                predictedData[state][race.toLowerCase() + "UnknownGenderDemocratCounter"],
+                predictedData[state][race.toLowerCase() + "UnknownGenderRepublicanCounter"],
+                predictedData[state][race.toLowerCase() + "UnknownGenderNeutralCounter"],
+                predictedData[state][race.toLowerCase() + "UnknownGenderUnknownPoliticsCounter"],
+            ]
+        },
+        ]
+    };
+    document.getElementById('demo-' + race).style.height = "auto";
+    var ctx = document.getElementById('demo-' + race).getContext('2d');
+    window.charts.push(new Chart(ctx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+            legend: {
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: title
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+    }));
 }

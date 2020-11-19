@@ -1,5 +1,5 @@
 function createTurnout(state) {
-  document.getElementById("state").innerHTML = stateHash[state];
+  document.getElementById("state").innerHTML = predictedData[state]["state_full"];
   document.getElementById("turnout").innerHTML = "Voter Turnout Rate: " + turnoutActData[state]["__4"];
 }
 
