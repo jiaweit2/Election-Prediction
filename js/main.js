@@ -2,8 +2,13 @@ const randomScalingFactor = function () {
     return Math.round(Math.random() * 100);
 };
 window.charts = []
+var toObject = null;
 
 function showResults(state, bg) {
+    if (toObject) {
+        clearTimeout(toObject);
+        toObject = null;
+    }
     document.getElementById("popup").style.pointerEvents = "initial";
     document.getElementById("popup").style.opacity = "1";
     if (bg == "#4DBBF5") {
@@ -27,7 +32,7 @@ function closePopup() {
         chart.destroy();
     });
     window.charts = []
-    setTimeout(() => {
+    toObject = setTimeout(() => {
         let arr = ["AIAN", "API", "Black", "White", "Hispanic", "Unknown"];
         arr.forEach(race => {
             document.getElementById('demo-' + race).style.height = "0";
