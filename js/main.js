@@ -7,15 +7,16 @@ function showResults(state, bg) {
     document.getElementById("popup").style.pointerEvents = "initial";
     document.getElementById("popup").style.opacity = "1";
     if (bg == "#4DBBF5") {
-        bg = "#ADE1FA";
+        bg = "#ADE1FA"; //democrat
     } else {
-        bg = "#EEB3BE";
+        bg = "#EEB3BE"; //republican
     }
     document.getElementById("popup").style.backgroundColor = bg;
 
     // Show data
     createTurnout(state);
     createDemoGraph(state);
+    createPrediction(state, bg);
 }
 
 function closePopup() {
@@ -32,4 +33,18 @@ function closePopup() {
             document.getElementById('demo-' + race).style.height = "0";
         });
     }, 800);
+}
+
+function createPrediction(state, bg) {
+    var actual = bg == "#ADE1FA" ? "Democrat" : "Republican";
+    var predict = "Democrat";
+    if (predictedData[state]["democratCounter"] < predictedData[state]["republicanCounter"]) {
+        predict = "Republican";
+    }
+    console.log(predictedData[state]["democratCounter"], predictedData[state]["republicanCounter"])
+    var s = "Actual Winnder: " + actual + "<br>";
+    s += "Predicted Winner: " + predict;
+    document.getElementById("result").innerHTML = s;
+
+
 }
