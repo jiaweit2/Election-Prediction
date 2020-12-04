@@ -11,11 +11,14 @@ function showResults(state, bg) {
     }
     document.getElementById("popup").style.pointerEvents = "initial";
     document.getElementById("popup").style.opacity = "1";
-    if (bg == "#4DBBF5") {
-        bg = "#ADE1FA"; //democrat
-    } else {
-        bg = "#EEB3BE"; //republican
+    if (bg != "#aaaaaa") {
+        if (bg == "#4DBBF5") {
+            bg = "#ADE1FA"; //democrat
+        } else {
+            bg = "#EEB3BE"; //republican
+        }
     }
+
     document.getElementById("popup").style.backgroundColor = bg;
 
     // Show data
@@ -48,10 +51,11 @@ function createPrediction(state, bg) {
         var predict = bg == "#ADE1FA" ? "Democrat" : "Republican";
         var actual = redStatesMap["True Outcome"].includes(state.toLowerCase());
         var res = (predict == "Republican") == actual ? "Correct" : "Wrong";
+        res = bg == "#aaaaaa" ? "invalid" : res;
         document.getElementById("result").innerHTML = "Predicted Winner: " + predict + ". The prediction is <b>" + res + "</b>!.";
     }
 }
-var modes = ["Corrected by Both", "Corrected by Gender", "Corrected by Race", "True Outcome", "Uncorrected"];
+var modes = ["Corrected by Political Bias", "Corrected by Gender&Race", "Corrected by Gender", "Corrected by Race", "True Outcome", "Uncorrected"];
 window.mode = "True Outcome";
 function changeto(text) {
     window.mode = text;
@@ -78,8 +82,10 @@ function makeMap() {
     //Do Work on Map
     for (var state in window.usRaphael) {
         var col = "#4DBBF5";
-        if (window.redStatesMap[window.mode].includes(state)) {
+        if (redStatesMap[window.mode].includes(state)) {
             col = "#EB4444";
+        } else if (window.mode == "Corrected by Political Bias" && !blueStatesMap[window.mode].includes(state)) {
+            col = "#aaaaaa";
         }
         window.usRaphael[state].attr("fill", col);
         textObj = labelPath(window.usRaphael[state], state.toUpperCase());

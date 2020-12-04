@@ -11227,7 +11227,11 @@ var redStatesMap = {
     "Uncorrected": ['al', 'hi', 'ne', 'nv', 'nh', 'tn', 'wv'],
     "Corrected by Gender": ['al', 'id', 'mt', 'nv', 'nh', 'nc', 'tn', 'wv'],
     "Corrected by Race": ['al', 'ak', 'az', 'co', 'ct', 'id', 'ky', 'mn', 'nh', 'nc', 'sc', 'tn', 'wv', 'wi'],
-    "Corrected by Both": ['al', 'ak', 'id', 'ky', 'ms', 'nh', 'nm', 'nc', 'oh', 'tn', 'tx', 'wv', 'wi', 'wy']
+    "Corrected by Gender&Race": ['al', 'ak', 'id', 'ky', 'ms', 'nh', 'nm', 'nc', 'oh', 'tn', 'tx', 'wv', 'wi', 'wy'],
+    "Corrected by Political Bias": ['az', 'fl', 'ga', 'ia', 'ky', 'me', 'nv', 'nc', 'oh', 'pa', 'sc', 'tx']
+}
+var blueStatesMap = {
+    "Corrected by Political Bias": ['co', 'mi', 'mn', 'nh', 'or', 'va', 'wa', 'wi']
 }
 
 var stateAbbrev = {
