@@ -22,6 +22,7 @@ function showResults(state, bg) {
     createTurnout(state);
     createDemoGraph(state);
     createPrediction(state, bg);
+
 }
 
 function closePopup() {
@@ -41,15 +42,69 @@ function closePopup() {
 }
 
 function createPrediction(state, bg) {
-    var actual = bg == "#ADE1FA" ? "Democrat" : "Republican";
-    var predict = "Democrat";
-    if (predictedData[state]["democratCounter"] < predictedData[state]["republicanCounter"]) {
-        predict = "Republican";
+    if (window.mode == "True Outcome") {
+        document.getElementById("result").innerHTML = "This is the true election outcome!";
+    } else {
+        var predict = bg == "#ADE1FA" ? "Democrat" : "Republican";
+        var actual = redStatesMap["True Outcome"].includes(state.toLowerCase());
+        var res = (predict == "Republican") == actual ? "Correct" : "Wrong";
+        document.getElementById("result").innerHTML = "Predicted Winner: " + predict + ". The prediction is <b>" + res + "</b>!.";
     }
-    console.log(predictedData[state]["democratCounter"], predictedData[state]["republicanCounter"])
-    var s = "Actual Winnder: " + actual + "<br>";
-    s += "Predicted Winner: " + predict;
-    document.getElementById("result").innerHTML = s;
+}
+var modes = ["Corrected by Both", "Corrected by Gender", "Corrected by Race", "True Outcome", "Uncorrected"];
+window.mode = "True Outcome";
+function changeto(text) {
+    window.mode = text;
+    document.getElementById("btn1").innerHTML = text;
+    if (text == "True Outcome") {
+        document.getElementById("btn1").style = "background-color:rgb(71, 245, 123);";
+    } else if (text == "Uncorrected") {
+        document.getElementById("btn1").style = "background-color:rgb(240, 118, 97);";
+    } else {
+        document.getElementById("btn1").style = "";
+    }
+    s = "";
+    modes.forEach(m => {
+        if (m != text) {
+            s += "<a onclick=\"changeto('" + m + "')\">" + m + "</a>";
+        }
+    });
+    document.getElementById("myDropdown").innerHTML = s;
+    makeMap();
 
+}
 
+function makeMap() {
+    //Do Work on Map
+    for (var state in window.usRaphael) {
+        var col = "#4DBBF5";
+        if (window.redStatesMap[window.mode].includes(state)) {
+            col = "#EB4444";
+        }
+        window.usRaphael[state].attr("fill", col);
+        textObj = labelPath(window.usRaphael[state], state.toUpperCase());
+        (function (st, state, textObj) {
+
+            st[0].style.cursor = "pointer";
+
+            st[0].onmouseover = function () {
+                st.animate({ stroke: "#000" }, 500);
+                st.toFront();
+                textObj.toFront();
+                window.R.safari();
+            };
+
+            st[0].onclick = function () {
+                showResults(state.toUpperCase(), window.usRaphael[state].attrs.fill);
+            };
+
+            st[0].onmouseout = function () {
+                st.animate({ stroke: "#fff" }, 500);
+                st.toFront();
+                textObj.toFront();
+                window.R.safari();
+            };
+
+        })(window.usRaphael[state], state, textObj);
+    }
 }

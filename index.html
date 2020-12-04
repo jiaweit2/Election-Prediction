@@ -11,8 +11,21 @@
 <body>
   <div class="navbar">
     <p>Election Prediction 2020</p>
+    <div class="dropdown">
+      <button onclick="myFunction()" style="background-color: rgb(86, 202, 106);" id="btn1" class="dropbtn">True
+        Outcome</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a onclick="changeto('Corrected by Gender')">Corrected by Gender</a>
+        <a onclick="changeto('Corrected by Race')">Corrected by Race</a>
+        <a onclick="changeto('Corrected by Both')">Corrected by Both</a>
+        <a onclick="changeto('Uncorrected')"> Uncorrected</a>
+      </div>
+    </div>
   </div>
-  <div id="container"></div>
+
+  <div id="container">
+  </div>
+
   <div id="popup">
     <span id='close' onclick="closePopup()">&#10006;</span>
     <p id="state"></p>
@@ -52,6 +65,9 @@
   <script type="text/javascript" src="data/turnout.js"></script>
 
   <script>
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
     function labelPath(pathObj, text) {
       fontSize = 15;
       smallStates = ["VT", "NH", "MA", "RI", "CT", "NJ", "DE", "MD", "DC"]
@@ -108,7 +124,7 @@
         history.scrollRestoration = 'manual';
       }
       window.scrollTo(0, 0);
-      var R = Raphael("container", 950, 600),
+      window.R = Raphael("container", 950, 600),
         attr = {
           "fill": "#d3d3d3",
           "stroke": "#fff",
@@ -122,46 +138,23 @@
 
       //Draw Map and store Raphael paths
       for (var state in usMap) {
-        usRaphael[state] = R.path(usMap[state]).attr(attr);
+        usRaphael[state] = window.R.path(usMap[state]).attr(attr);
       }
-
-      //Initialization
-      redStates = ["ak", "mt", "id", "wy", "ut", "nd", "sd", "ne", "ks", "ok", "tx", "la", "ar", "mo", "ia", "ms", "al", "tn", "in", "ky", "oh", "wy", "sc", "nc", "fl"]
-
-      //Do Work on Map
-      for (var state in usRaphael) {
-        var col = "#4DBBF5";
-        if (redStates.includes(state)) {
-          col = "#EB4444";
-        }
-        usRaphael[state].attr("fill", col);
-        textObj = labelPath(usRaphael[state], state.toUpperCase());
-        (function (st, state, textObj) {
-
-          st[0].style.cursor = "pointer";
-
-          st[0].onmouseover = function () {
-            st.animate({ stroke: "#000" }, 500);
-            st.toFront();
-            textObj.toFront();
-            R.safari();
-          };
-
-          st[0].onclick = function () {
-            showResults(state.toUpperCase(), usRaphael[state].attrs.fill);
-          };
-
-          st[0].onmouseout = function () {
-            st.animate({ stroke: "#fff" }, 500);
-            st.toFront();
-            textObj.toFront();
-            R.safari();
-          };
-
-        })(usRaphael[state], state, textObj);
-      }
-
+      window.usRaphael = usRaphael;
+      makeMap();
     };
+    window.onclick = function (event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
   </script>
 </body>
 
